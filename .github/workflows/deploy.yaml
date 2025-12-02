@@ -22,5 +22,5 @@ jobs:
         with:
           apiToken: ${{ secrets.TOKEN }}
           accountId: ${{ secrets.AKM }}
-          projectName: "orang-orangan"
-          directory: "./"
+          projectName: "orang-orangan-2tb"
+          directory: "public"
